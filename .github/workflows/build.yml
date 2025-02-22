@@ -63,7 +63,7 @@ jobs:
           curl -o zip.exe -L http://www.stahlworks.com/dev/zip.exe
           ./Scripts/buildWin.bat
           cd dist
-          ./zip -r -q "../zip/ClassWidgets-Windows-${{ matrix.arch }} (Unsigned).zip" ClassWidgets
+          ../zip -r -q "../zip/ClassWidgets-Windows-${{ matrix.arch }} (Unsigned).zip" ClassWidgets
 
       - name: Run Linux build
         if: ${{ matrix.os == 'ubuntu-20.04' }}
