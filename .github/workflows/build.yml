@@ -60,73 +60,24 @@ jobs:
         if: ${{ matrix.os == 'windows-latest' }}
         run: |
           curl -o zip.exe -L http://www.stahlworks.com/dev/zip.exe
-          uv venv
-          .venv\Scripts\activate
-          uv pip install -r requirements.txt
-          uv pip install pyinstaller
-          pyinstaller main.py `
-            -w `
-            -i ./img/favicon.ico `
-            -n ClassWidgets `
-            --contents-directory . `
-            --add-data config:config `
-            --add-data audio:audio `
-            --add-data img:img `
-            --add-data ui:ui `
-            --add-data font:font `
-            --add-data view:view `
-            --add-data LICENSE:. `
-            --add-data plugins:plugins `
-            --hidden-import darkdetect
-          ./zip -r -q "zip/ClassWidgets-Windows-${{ matrix.arch }} (Unsigned).zip" dist/ClassWidgets/*
+          ./Scripts/buildWin.bat
+          cd dist
+          ./zip -r -q "../zip/ClassWidgets-Windows-${{ matrix.arch }} (Unsigned).zip" ClassWidgets
 
       - name: Run Linux build
         if: ${{ matrix.os == 'ubuntu-20.04' }}
         run: |
-          uv venv
-          source .venv/bin/activate
-          uv pip install -r requirements.txt
-          uv pip install pyinstaller
-          pyinstaller main.py \
-            -w \
-            -i ./img/favicon.ico \
-            -n ClassWidgets \
-            --contents-directory . \
-            --add-data config:config \
-            --add-data audio:audio \
-            --add-data img:img \
-            --add-data ui:ui \
-            --add-data font:font \
-            --add-data view:view \
-            --add-data LICENSE:. \
-            --add-data plugins:plugins \
-            --hidden-import darkdetect
-          zip -r -q zip/ClassWidgets-Ubuntu20.04.zip dist/ClassWidgets/*
+          bash Scripts/buildLinux.sh
+          cd dist
+          zip -r -q ../zip/ClassWidgets-Ubuntu20.04.zip ClassWidgets
 
       - name: Run macOS build
         if: ${{ startsWith(matrix.os, 'macos') }}
         run: |
-          uv venv
-          source .venv/bin/activate
-          uv pip install -r requirements.txt
-          uv pip install pyinstaller
-          pyinstaller main.py \
-            -w \
-            -i ./img/favicon.icns \
-            -n "Class Widgets" \
-            --contents-directory . \
-            --add-data config:config \
-            --add-data audio:audio \
-            --add-data img:img \
-            --add-data ui:ui \
-            --add-data font:font \
-            --add-data view:view \
-            --add-data LICENSE:. \
-            --add-data plugins:plugins \
-            --hidden-import darkdetect
-          
-          zip -r -q "zip/Class Widgets-macOS-${{ matrix.arch }} (bundle).zip" dist/Class\ Widgets.app/*
-          zip -r -q "zip/Class Widgets-macOS-${{ matrix.arch }}.zip" dist/Class\ Widgets/*
+          bash Scripts/buildOSX.sh
+          cd dist
+          zip -r -q "../zip/Class Widgets-macOS-${{ matrix.arch }} (bundle).zip" Class\ Widgets.app
+          zip -r -q "../zip/Class Widgets-macOS-${{ matrix.arch }}.zip" Class\ Widgets
 
       - name: Upload unsigned application
         if: ${{ ( matrix.os != 'windows-latest' && github.event_name != 'pull_request' ) || github.event_name == 'pull_request' }}
