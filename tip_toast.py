@@ -70,7 +70,7 @@ class tip_toast(QWidget):
 
         if state == 1:
             logger.info('上课铃声显示')
-            title_label.setText('活动开始')  # 修正文本，以适应不同场景
+            title_label.setText('上课')  # 修正文本，以适应不同场景
             subtitle_label.setText('当前课程')
             lesson.setText(lesson_name)  # 课程名
             self.playsound(attend_class)
@@ -88,13 +88,13 @@ class tip_toast(QWidget):
         elif state == 2:
             logger.info('放学铃声显示')
             title_label.setText('放学')
-            subtitle_label.setText('当前课程已结束')
+            subtitle_label.setText('终于可以休息啦o(*^＠^*)o')
             lesson.setText('')  # 课程名
             self.playsound(finish_class)
             setThemeColor(f"#{config_center.read_conf('Color', 'finish_class')}")
         elif state == 3:
             logger.info('预备铃声显示')
-            title_label.setText('即将开始')  # 同上
+            title_label.setText('要上课了')  # 同上
             subtitle_label.setText('下一节')
             lesson.setText(lesson_name)
             self.playsound(prepare_class)
